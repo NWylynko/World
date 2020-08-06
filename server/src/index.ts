@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
 import db from "./db";
-// import SQL from "sql-template-strings";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -86,14 +85,46 @@ app.get("/deep_lakes", (req, res, sql) => {
 //   sql(``)
 // })
 
-// app.get("/", (req, res, sql) => {
-//   sql(``)
-// })
+app.get("/europe_countries", (req, res, sql) => {
+  sql(`SELECT Country.Name, Country.Population
+  FROM Country
+  INNER JOIN encompasses
+  WHERE encompasses.Continent = "Europe"
+  AND Country.Code = encompasses.Country
+  ORDER BY Country.Population DESC`)
+})
 
-// app.get("/", (req, res, sql) => {
-//   sql(``)
-// })
+app.get("/sample_cities_venezuela", (req, res, sql) => {
+  sql(`SELECT Country.name, City.name, City.population
+  FROM Country
+  INNER JOIN City
+  WHERE Country.code = City.country
+  AND Country.name = "Venezuela"
+  ORDER BY City.population DESC`)
+})
 
+app.get("/sample_continents", (req, res, sql) => {
+  sql(`SELECT * FROM Continent`)
+})
+
+app.get("/sample_country", (req, res, sql) => {
+  sql(`SELECT * FROM Country
+  WHERE name = ${req.query.country}`)
+})
+
+app.get("/sample_country_city", (req, res, sql) => {
+  sql(`SELECT City.name, City.province, City.population FROM City
+  INNER JOIN Country
+  WHERE City.country = Country.code
+  AND Country.name = ${req.query.country}
+  ORDER BY City.population DESC`)
+})
+
+app.get("/sample_population_costa_rica", (req, res, sql) => {
+  sql(`SELECT name, population
+  FROM Country
+  WHERE name="Costa Rica"`)
+})
 
 app.use(async (sql: string, req: Request, res: Response, next: NextFunction) => {
   try {
