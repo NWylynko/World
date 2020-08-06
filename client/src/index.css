@@ -1,11 +1,9 @@
-html {
-
-}
-
-body {
-
-}
-
-a, h1, h2, h3, h4, h5, h6, p {
+a {
+  display: block;
+  color: rgb(30, 105, 139);
   
+}
+
+a::before {
+  content: " • ";
 }

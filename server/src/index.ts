@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import db from "./db";
 const app = express();
+app.use(cors())
 const PORT = process.env.PORT || 3001;
 
 app.get("/mountains_of_the_world", (req, res, sql) => {
@@ -31,6 +33,7 @@ app.get("/cities_Ni", (req, res, sql) => {
 })
 
 app.get("/cities_country", (req, res, sql) => {
+  // probs not correct
   sql(`SELECT * FROM City
   INNER JOIN Country
   WHERE Country.Code = City.Country`)
