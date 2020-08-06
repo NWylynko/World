@@ -133,7 +133,7 @@ app.use(async (sql: string, req: Request, res: Response, next: NextFunction) => 
   try {
     console.log(sql)
     let result = await db().all(sql)
-    res.json({ success: true, data: result })
+    res.json({ success: true, data: result, sql })
   } catch (err) {
     next(err)
   }

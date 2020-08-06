@@ -1,7 +1,14 @@
+body {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  min-height: 80vh;
+}
+
 a {
   display: block;
   color: rgb(30, 105, 139);
-  
+
 }
 
 a::before {

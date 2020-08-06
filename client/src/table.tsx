@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 export default function SimpleTable({ fetch }: { fetch: string }) {
 
-  const { data, error, loading }: { data: any[], error: string | null, loading: boolean } = useFetch('http://localhost:3001/' + fetch)
+  const { data, error, loading, extraData } = useFetch('http://localhost:3001/' + fetch)
 
   const [headers, setHeaders] = useState<string[]>([])
 
@@ -34,15 +34,16 @@ export default function SimpleTable({ fetch }: { fetch: string }) {
   return (
     <>
       <Title text={fetch} />
-      <TableContainer component={Paper}>
+      <Typography style={{color: 'grey', maxWidth: '80vw', marginBottom: 30}}>SQL: {extraData.sql}</Typography>
+      <TableContainer component={Paper} style={{minWidth: '80vw'}}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              {headers.map(cell => <TableCell>{cell}</TableCell>)}
+              {headers.map((cell, index) => <TableCell key={index} >{cell}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((value, index) => <Row value={value} key={index} />)}
+            {data.map((value: any, index: number) => <Row value={value} key={index} />)}
           </TableBody>
         </Table>
       </TableContainer>
@@ -52,17 +53,17 @@ export default function SimpleTable({ fetch }: { fetch: string }) {
 
 function Title({ text }: { text: string }) {
   return (
-    <Typography>
-      <h1>{capital_letter(text.replace(/_/g, ' '))}</h1>
+    <Typography variant="h3">
+      {capital_letter(text.replace(/_/g, ' '))}
     </Typography>
   )
 }
 
-function Row({ value}: { value: any }) {
+function Row({ value }: { value: any }) {
   return (
-    <TableRow key={value.name}>
-      {Object.keys(value).map((item: string) =>
-        (<TableCell>{value[item]}</TableCell>)
+    <TableRow>
+      {Object.keys(value).map((item: string, index: number) =>
+        (<TableCell key={index}>{value[item]}</TableCell>)
       )}
     </TableRow>
   )

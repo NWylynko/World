@@ -4,12 +4,14 @@ interface Fetch {
   loading: boolean;
   error: string | null;
   data: any;
+  extraData: any;
 }
 
 export default function useFetch(url: RequestInfo): Fetch {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
+  const [extraData, setExtraData] = useState<any>(null)
 
   useEffect(() => {
     fetch(url)
@@ -24,6 +26,7 @@ export default function useFetch(url: RequestInfo): Fetch {
           setError(json.error)
           return []
         }
+        setExtraData({sql: json.sql})
         return json.data
       })
       .then(data => setData(data))
@@ -33,5 +36,5 @@ export default function useFetch(url: RequestInfo): Fetch {
       });
   }, [url]);
 
-  return { loading, error, data };
+  return { loading, error, data, extraData };
 }
