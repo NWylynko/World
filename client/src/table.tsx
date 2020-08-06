@@ -24,11 +24,11 @@ export default function SimpleTable({ fetch }: { fetch: string }) {
   }, [data, loading, error])
 
   if (loading) {
-    return <><Title text={fetch} /><h2>loading...</h2></>
+    return <><Title text={fetch} /><Typography variant="h2">loading...</Typography></>
   }
 
   if (error) {
-    return <><Title text={fetch} /><h2>Error: {error}</h2></>
+    return <><Title text={fetch} /><Typography variant="h2">Error: {error}</Typography></>
   }
 
   return (
