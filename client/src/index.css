@@ -5,12 +5,10 @@ body {
   min-height: 80vh;
 }
 
-a {
-  display: block;
+a, .link {
+  display: list-item;
   color: rgb(30, 105, 139);
+  margin: 5px;
+  padding: 5px;
 
-}
-
-a::before {
-  content: " • ";
 }

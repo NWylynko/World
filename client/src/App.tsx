@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  Redirect
 } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Table from './table';
 
 export default function App() {
@@ -24,7 +27,8 @@ export default function App() {
 
 function Page() {
   let { id } = useParams();
-  return <Table fetch={id} />
+  // return <Table fetch={id} />
+  return <Table fetch={id + window.location.search} />
 }
 
 function Home() {
@@ -46,14 +50,56 @@ function Home() {
         <Link to="/biggest_cities">Biggest Cities</Link>
         <Link to="/large_deserts">Large Deserts</Link>
         <Link to="/deep_lakes">Deep Lakes</Link>
-        {/* <Link to="/insmarsat">insmarsat</Link> */}
+        <Link to="/international_mobile_satellite_organization">International Mobile Satellite Organization</Link>
         <Link to="/europe_countries">Europe Countries</Link>
         <Link to="/sample_cities_venezuela">Sample Cities Venezuela</Link>
         <Link to="/sample_continents">Sample Continents</Link>
-        {/* <Link to="/sample_country">Sample Country</Link> */}
-        {/* <Link to="/sample_country_city">Sample Country City</Link> */}
         <Link to="/sample_population_costa_rica">Sample Population Costa Rica</Link>
       </Typography>
+      <Input link="/sample_country">Sample Country</Input>
+      <Input link="/sample_country_city">Sample Country City</Input>
+      <RawSQLInput />
     </>
   );
+}
+
+function Input({ children, link }: { children: string, link: string }) {
+
+  const [country, setCountry] = useState("");
+  const [redirect, setRedirect] = useState(<></>);
+
+  const onClick = () => {
+    console.log(link, country)
+    setRedirect(<Redirect push to={`${link}?country=${country}`} />)
+  }
+
+  return (
+    <>
+    {redirect}
+    <div style={{ margin: 5, display: 'list-item', color: 'rgb(30, 105, 139)' }}>
+      <TextField label={children} placeholder="Greece" value={country} onChange={event => setCountry(event.target.value)} />
+      <Button onClick={onClick} variant="contained">Lookup</Button>
+    </div>
+    </>
+  )
+}
+
+function RawSQLInput() {
+
+  const [sql, setSQL] = useState("");
+  const [redirect, setRedirect] = useState(<></>);
+
+  const onClick = () => {
+    setRedirect(<Redirect push to={`/raw?sql=${sql}`} />)
+  }
+
+  return (
+    <>
+    {redirect}
+    <div style={{ margin: 5, display: 'list-item', color: 'rgb(30, 105, 139)' }}>
+      <TextField label="Raw SQL" placeholder="Greece" value={sql} onChange={event => setSQL(event.target.value)} />
+      <Button onClick={onClick} variant="contained">Lookup</Button>
+    </div>
+    </>
+  )
 }

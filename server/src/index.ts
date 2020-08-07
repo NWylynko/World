@@ -34,8 +34,8 @@ app.get("/cities_Ni", (req, res, sql) => {
 
 app.get("/cities_country", (req, res, sql) => {
   // probs not correct
-  sql(`SELECT * FROM City
-  INNER JOIN Country
+  sql(`SELECT *
+  FROM City, Country
   WHERE Country.Code = City.Country`)
 })
 
@@ -48,8 +48,7 @@ app.get("/cities_of_china", (req, res, sql) => {
 })
 
 app.get("/world_languages", (req, res, sql) => {
-  // both tables have the label `Name` so its broken
-  sql(`SELECT Language.Name, Language.Percentage, Country.Name
+  sql(`SELECT Language.Name as Language, Language.Percentage, Country.Name as Country
   FROM Language
   INNER JOIN Country
   WHERE Language.Country = Country.Code
@@ -84,9 +83,13 @@ app.get("/deep_lakes", (req, res, sql) => {
   LIMIT 15`)
 })
 
-// app.get("/insmarsat", (req, res, sql) => {
-//   sql(``)
-// })
+app.get("/international_mobile_satellite_organization", (req, res, sql) => {
+  sql(`SELECT Country.name as Country, Country.Population, Organization.Name as Organisation
+  FROM Country, isMember, Organization
+  WHERE Organization.Abbreviation = "Intelsat"
+  AND Organization.Abbreviation = isMember.Organization
+  AND isMember.Country = Country.Code`)
+})
 
 app.get("/europe_countries", (req, res, sql) => {
   sql(`SELECT Country.Name, Country.Population
@@ -112,14 +115,14 @@ app.get("/sample_continents", (req, res, sql) => {
 
 app.get("/sample_country", (req, res, sql) => {
   sql(`SELECT * FROM Country
-  WHERE name = ${req.query.country}`)
+  WHERE name = "${req.query.country}"`)
 })
 
 app.get("/sample_country_city", (req, res, sql) => {
   sql(`SELECT City.name, City.province, City.population FROM City
   INNER JOIN Country
   WHERE City.country = Country.code
-  AND Country.name = ${req.query.country}
+  AND Country.name = "${req.query.country}"
   ORDER BY City.population DESC`)
 })
 
@@ -127,6 +130,10 @@ app.get("/sample_population_costa_rica", (req, res, sql) => {
   sql(`SELECT name, population
   FROM Country
   WHERE name="Costa Rica"`)
+})
+
+app.get("/raw", (req, res, sql) => {
+  sql(req.query.sql)
 })
 
 app.use(async (sql: string, req: Request, res: Response, next: NextFunction) => {

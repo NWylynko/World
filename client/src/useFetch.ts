@@ -30,7 +30,7 @@ export default function useFetch(url: RequestInfo): Fetch {
         return json.data
       })
       .then(data => setData(data))
-      .catch(setError)
+      .catch(err => setError(err.message))
       .finally(() => {
         setLoading(false);
       });
